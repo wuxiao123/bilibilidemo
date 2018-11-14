@@ -2,18 +2,21 @@
   <div id="app" @touchstart='touchStart' @touchmove='touchMove' @touchend='touchEnd' >
     <router-view/>
     <div class="mask" v-if="showmask" @click='changeMaskShow'></div>
-    <slide :slidewidth="{slidewidth}"></slide>
+    <slide :slidewidth="{slidewidth,showslide}"></slide>
   </div>
 </template>
 
 <script>
 import slide from './components/navigation-slide'
+import Bus from './bus.js';
+
 export default {
     data(){
         return {
             showmask:false,
             slidewidth:'-50%',
-            canSlide:false
+            canSlide:false,
+            showslide:false
         }
     },
     components:{
@@ -22,11 +25,17 @@ export default {
      mounted() {
         let that = this;
         that.screenwidth=document.documentElement.clientWidth ;
+        Bus.$on('showslide', text => {
+            if(text){
+               this.changeShowslide();
+            }
+        })
     },
     methods:{
         changeShowslide:function(){
-            this.showslide=!this.showslide;
-            this.showmask=!this.showmask
+            this.slidewidth=0;
+            this.showmask=!this.showmask;
+            this.showslide=true
         },
        touchStart:function(ev){
             if(ev.changedTouches[0].clientX<10){
@@ -63,6 +72,7 @@ export default {
        changeMaskShow:function(){
             this.showmask=false;
             this.slidewidth="-50%";
+            this.showslide=false
        }
     },
     created(){

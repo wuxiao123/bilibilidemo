@@ -1,16 +1,17 @@
 <template>
-  <div id="slide" :style="{left:slidewidth.slidewidth}">
+  <div id="slide" :class="[slidewidth.showslide?'show':'']" :style="{left:slidewidth.slidewidth}">
     <div>123</div>
   </div>
 </template>
 
 <script>
+import Bus from '../bus.js';
 
 export default {
   name:'slide',
   data(){
     return{
-      slide:0
+
     }
   },
   props:['slidewidth'],
@@ -18,11 +19,11 @@ export default {
   },
   created(){
     console.log(this.slidewidth);
-    // this.slidewidth='-50%';
   }
     
 }
-</script>
+</script> 
+
 
 
 <style scoped>
@@ -32,7 +33,22 @@ export default {
     background-color: pink;
     position: fixed;
     z-index: 1003;
-    top: 0;
-    left: 0
+    top: 0
+  }
+  .show{
+    animation:mymove 1s 1;
+    -webkit-animation:mymove 1s 1; /*Safari and Chrome*/
+  }
+
+  @keyframes mymove
+  {
+    from {left:-50%;}
+    to {left:0;}
+  }
+
+  @-webkit-keyframes mymove 
+  {
+    from {left:-50%;}
+    to {left:0;}
   }
 </style>
