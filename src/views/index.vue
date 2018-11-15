@@ -6,10 +6,11 @@
             <router-link :to="{ path: item.href }">{{item.title}}</router-link>
         </div>
     </div>
-    <div>
-        <router-view></router-view>
-    </div>
-    <div class="content"></div>
+    <v-touch  @swipeleft="onSwipeLeft(index)"  @swiperight="onSwipeRight()">
+        <div style="height:300px">
+            <router-view></router-view>
+        </div>
+    </v-touch>
     <navBar :nav=0></navBar>
   </div>
 </template>
@@ -22,14 +23,15 @@ export default {
   data(){
       return{
           headerItem:[
-              {id:1,"title":"直播",'href':'/live'},
-              {id:2,"title":"推荐",'href':'/recommend'},
-              {id:3,"title":"追番",'href':'/chasing'},
-              {id:4,"title":"喵哩喵哩",'href':'/miao'},
-              {id:5,"title":"NBA星点播",'href':'/nba'},
-              {id:6,"title":"进博会",'href':'/meet'}
+              {id:1,"title":"直播",'category':'live'},
+              {id:2,"title":"推荐",'category':'recommend'},
+              {id:3,"title":"追番",'category':'chasing'},
+              {id:4,"title":"喵哩喵哩",'category':'miao',},
+              {id:5,"title":"NBA星点播",'category':'nba'},
+              {id:6,"title":"进博会",'category':'meet'}
             ],
           sel:1,
+          path:"/recommend"
       }
   },
   components: {
@@ -38,7 +40,22 @@ export default {
   },
   methods:{
       changesel(index){
-          this.sel=index;
+        console.log(index);
+        this.sel=index;
+      },
+      onSwipeLeft(){
+          this.sel=this.sel+1
+      },
+      onSwipeRight(){
+          this.sel=this.sel-1
+      }
+  },
+  created(){
+      var header=this.headerItem;
+      for( let i=0;i<header.length;i++){
+          if(this.$route.path==header[i].href){
+              this.sel=i;
+          }
       }
   }
 }
